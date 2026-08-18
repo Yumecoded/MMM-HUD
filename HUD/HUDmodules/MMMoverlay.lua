@@ -11,14 +11,6 @@ function t.create()
     addLuaSprite("MMMoverlay")
 end
 
-function t.onUpdatePost(elapsed)
-    if not online then return end
-
-    if not songStarted then
-        setProperty("waitReadySpr.visible", false)
-    end
-end
-
 function t.resize(newWidth)
     if not online then return end
 
