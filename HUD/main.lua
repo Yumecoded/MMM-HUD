@@ -42,7 +42,7 @@ end
 function createHUD()
     HUDmodules = {}
 
-    for i,v in ipairs({"MMMver", "MMMsongName", "MMMtimer", "strums", "MMMopponentScore", "healthBar", "icons", "MMMscore", "MMMwarning", "MMMratings", "MMMunderlay", "notes", "MMMoverlay"}) do
+    for i,v in ipairs({"MMMver", "MMMsongName", "MMMtimer", "strums", "MMMopponentScore", "healthBar", "icons", "MMMscore", "MMMwarning", "MMMratings", "MMMunderlay", "notes", "MMMoverlay", "MMMwaitReadyTxt"}) do
         HUDmodules[i] = module("HUD/HUDmodules/"..v..".lua")
         HUDmodules[i].create()
     end
@@ -75,7 +75,9 @@ function onCreatePost()
 
     multiplayer = module("HUD/multiplayer.lua")
     solo = module("HUD/solo.lua")
-    solo.create()
+    if solo then
+        solo.create()
+    end
 
     botplaySine = 0
 
