@@ -151,6 +151,10 @@ function onSpawnNote(id, data, type, isSustainNote, strumTime)
     callHUD("onSpawnNote", id, data, type, isSustainNote, strumTime)
 end
 
+function onStartCountdown()
+    callHUD("onStartCountdown")
+end
+
 function onWindowResize(newWidth)
     callHUD("resize", newWidth)
 end

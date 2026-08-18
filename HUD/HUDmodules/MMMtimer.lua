@@ -8,6 +8,9 @@ function t.create()
     setTextSize("MMMtimer", 21)
     setTextFont("MMMtimer", "RobotoMono-Regular.ttf")
     setTextBorder("MMMtimer", 1, 'black')
+    if online then
+        setProperty("MMMtimer.alpha", 0)
+    end
     addLuaText("MMMtimer")
 
     t.countdownFrames = {"[-]", "[-:]", "[-:-]", "[-:--]", "[-:--]"}
@@ -32,6 +35,10 @@ function t.onCountdownTick(counter)
     if timeBarType=="Disabled" then return end
 
     setTextString("MMMtimer", t.countdownFrames[counter+1])
+end
+
+function t.onStartCountdown()
+    setProperty("MMMtimer.alpha", 1)
 end
 
 return t

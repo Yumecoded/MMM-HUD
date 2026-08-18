@@ -17,6 +17,9 @@ function t.create()
     setTextSize("MMMsongName", 21)
     setTextFont("MMMsongName", "RobotoMono-Regular.ttf")
     setTextBorder("MMMsongName", 1, 'black')
+    if online then
+        setProperty("MMMsongName.alpha", 0)
+    end
     addLuaText("MMMsongName")
 
     local songColor
@@ -46,6 +49,10 @@ end
 
 function t.resize(newWidth)
     setTextWidth("MMMsongName", newWidth)
+end
+
+function t.onStartCountdown()
+    setProperty("MMMsongName.alpha", 1)
 end
 
 return t

@@ -77,13 +77,21 @@ function t.create()
         makeLuaSprite("MMMunderlayLeft", "", t.left.x, t.left.y)
         makeGraphic("MMMunderlayLeft", t.left.width, t.left.height, "000000")
         setObjectCamera("MMMunderlayLeft", "hud")
-        setProperty("MMMunderlayLeft.alpha", noteUnderlayOpacity)
+        if online then
+            setProperty("MMMunderlayLeft.alpha", 0)
+        else
+            setProperty("MMMunderlayLeft.alpha", noteUnderlayOpacity)
+        end
         addLuaSprite("MMMunderlayLeft")
 
         makeLuaSprite("MMMunderlayRight", "", t.right.x, t.right.y)
         makeGraphic("MMMunderlayRight", t.right.width, t.right.height, "000000")
         setObjectCamera("MMMunderlayRight", "hud")
-        setProperty("MMMunderlayRight.alpha", noteUnderlayOpacity)
+        if online then
+            setProperty("MMMunderlayRight.alpha", 0)
+        else
+            setProperty("MMMunderlayRight.alpha", noteUnderlayOpacity)
+        end
         addLuaSprite("MMMunderlayRight")
 
         if not opponentStrums then
@@ -116,6 +124,11 @@ function t.resize(newWidth)
         setProperty("MMMunderlayLeft.x", t.left.x)
         setProperty("MMMunderlayRight.x", t.right.x)
     end
+end
+
+function t.onStartCountdown()
+    setProperty("MMMunderlayLeft.alpha", noteUnderlayOpacity)
+    setProperty("MMMunderlayRight.alpha", noteUnderlayOpacity)
 end
 
 return t
