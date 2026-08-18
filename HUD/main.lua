@@ -42,7 +42,7 @@ end
 function createHUD()
     HUDmodules = {}
 
-    for i,v in ipairs({"MMMver", "MMMsongName", "MMMtimer", "strums", "MMMopponentScore", "healthBar", "icons", "MMMscore", "MMMwarning", "MMMratings", "MMMunderlay", "notes"}) do
+    for i,v in ipairs({"MMMver", "MMMsongName", "MMMtimer", "strums", "MMMopponentScore", "healthBar", "icons", "MMMscore", "MMMwarning", "MMMratings", "MMMunderlay", "notes", "MMMoverlay"}) do
         HUDmodules[i] = module("HUD/HUDmodules/"..v..".lua")
         HUDmodules[i].create()
     end
