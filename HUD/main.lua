@@ -20,6 +20,7 @@ function hidePsychHUD()
     end
 end
 
+--my city now
 function destroyCustomHUD()
     local tags = runHaxeFunction("getObjectsToDestroy")
 
@@ -42,7 +43,7 @@ end
 function createHUD()
     HUDmodules = {}
 
-    for i,v in ipairs({"MMMver", "MMMsongName", "MMMtimer", "strums", "MMMopponentScore", "healthBar", "icons", "MMMscore", "MMMwarning", "MMMratings", "MMMunderlay", "notes", "MMMoverlay", "MMMwaitReadyTxt"}) do
+    for i,v in ipairs({"MMMver", "MMMsongName", "MMMtimer", "strums", "MMMopponentScore", "healthBar", "icons", "MMMscore", "MMMwarning", "MMMratings", "MMMunderlay", "notes", "MMMoverlay", "MMMwaitReadyTxt", "MMMdisconnect"}) do
         HUDmodules[i] = module("HUD/HUDmodules/"..v..".lua")
         HUDmodules[i].create()
     end
@@ -159,4 +160,8 @@ end
 
 function onWindowResize(newWidth)
     callHUD("resize", newWidth)
+end
+
+function onPlayerDisconnect(name)
+    callHUD("onPlayerDisconnect", name)
 end
