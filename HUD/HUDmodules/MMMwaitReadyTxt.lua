@@ -37,9 +37,8 @@ function t.onTimerCompleted(tag, loops, loopsLeft)
             t.dots = 1
         end
 
-        setTextString("MMMwaitReadyTxt", "Waiting for other player"..string.rep(".", t.dots))
-
         if not songStarted then
+            setTextString("MMMwaitReadyTxt", "Waiting for other player"..string.rep(".", t.dots))
             runTimer("MMMwaitReadyTxt", 1)
         end
     end
