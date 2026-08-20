@@ -87,6 +87,9 @@ function onCreatePost()
 end
 
 function onUpdatePost(elapsed)
+    setProperty("vocals.volume", 1)
+    setProperty("opponentVocals.volume", 1)
+
     showFP = getPropertyFromClass("backend.ClientPrefs", "data.showFP")
 
     botplaySine = botplaySine+(180 * elapsed)
