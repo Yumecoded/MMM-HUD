@@ -6,6 +6,7 @@ function t.create()
 
     t.strums = HUDmodules[4]
     t.tag = "opponentStrums"
+    t.updateScore = false
 
     makeLuaText("MMMopponentScore", "Accuracy: -", 0, 0, 0)
     if middlescroll then
@@ -44,6 +45,67 @@ function t.resize(newWidth)
     setTextWidth("MMMopponentScore", t.width)
     setProperty("MMMopponentScore.x", t.x)
     setProperty("MMMopponentScore.y", t.y)
+end
+
+function t.doScoreUpdate(sid)
+    if multiplayer.isPlayerOnTheSameSide(sid) then return end
+
+    local winCondition = multiplayer.winCondition
+    local value = multiplayer.getStat(winCondition, sid)
+
+    local opponentScoreString = multiplayer.winConditions[winCondition][1]..": "..value
+
+    if winCondition==0 then
+        opponentScoreString = opponentScoreString..'%'
+    end
+
+    if getTextString("MMMopponentScore")~=opponentScoreString then
+        setTextString("MMMopponentScore", opponentScoreString)
+    end
+end
+
+function t.onMessageNoteHit(sid, message)
+    if not t.updateScore then
+        t.updateScore = true
+        t.doScoreUpdate(sid)
+    end
+end
+
+function t.onMessageNoteMiss(sid, message)
+    if not t.updateScore then
+        t.updateScore = true
+        t.doScoreUpdate(sid)
+    end
+end
+
+function t.onUpdateScorePlayer(sid)
+    if not t.updateScore then return end
+
+    t.doScoreUpdate(sid)
+end
+
+function t.onMessageStrumPlay(sid, message)
+    if multiplayer.isPlayerOnTheSameSide(sid) then return end
+
+    if not t.updateScore then
+        t.updateScore = true
+
+        local opponentScoreString
+        local winCondition = multiplayer.winCondition
+        if winCondition==0 then
+            opponentScoreString = multiplayer.winConditions[winCondition][1]..": 0.00%"
+        else
+            opponentScoreString = multiplayer.winConditions[winCondition][1]..": 0"
+        end
+
+--         if MMMTeamMode then
+--             opponentScoreString = "Team "..opponentScoreString
+--         end
+
+        if getTextString("MMMopponentScore")~=opponentScoreString then
+            setTextString("MMMopponentScore", opponentScoreString)
+        end
+    end
 end
 
 return t

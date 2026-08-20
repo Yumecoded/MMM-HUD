@@ -158,6 +158,22 @@ function onStartCountdown()
     callHUD("onStartCountdown")
 end
 
+function onMessageNoteHit(sid, message)
+    callHUD("onMessageNoteHit", sid, message)
+end
+
+function onMessageNoteMiss(sid, message)
+    callHUD("onMessageNoteMiss", sid, message)
+end
+
+function onUpdateScorePlayer(sid)
+    callHUD("onUpdateScorePlayer", sid)
+end
+
+function onMessageStrumPlay(sid, message)
+    callHUD("onMessageStrumPlay", sid, message)
+end
+
 function onWindowResize(newWidth)
     callHUD("resize", newWidth)
 end
