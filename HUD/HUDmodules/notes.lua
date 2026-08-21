@@ -43,7 +43,16 @@ function t.onSpawnNote(id, data, type, isSustainNote, strumTime)
         end
 
         setPropertyFromGroup("notes", id, "scale.x", opponentScale)
-        if not isSustainNote then
+        if isSustainNote then
+            local animName = getPropertyFromGroup("notes", id, "animation.curAnim.name")
+            local isHoldEnd = stringEndsWith(animName, "end")
+
+            if isHoldEnd then
+                setPropertyFromGroup("notes", id, "scale.y", opponentScale)
+                setPropertyFromGroup("notes", id, "offsetY", -getPropertyFromGroup("notes", id, "height")/2.6)
+                print(getPropertyFromGroup("notes", id, "height"))
+            end
+        else
             setPropertyFromGroup("notes", id, "scale.y", opponentScale)
         end
     end
