@@ -24,10 +24,17 @@ function t.onUpdatePost()
 end
 
 function t.onSpawnNote(id, data, type, isSustainNote, strumTime)
+    local playerScale = t.strums.playerStrums.scale
+    local opponentScale = t.strums.opponentStrums.scale
+    if getPropertyFromClass("PlayState", "isPixelStage") then
+        playerScale = playerScale * 8
+        opponentScale = opponentScale * 8
+    end
+
     if getPropertyFromGroup("notes", id, "mustPress") == playsAsBF() then
-        setPropertyFromGroup("notes", id, "scale.x", t.strums.playerStrums.scale)
+        setPropertyFromGroup("notes", id, "scale.x", playerScale)
         if not isSustainNote then
-            setPropertyFromGroup("notes", id, "scale.y", t.strums.playerStrums.scale)
+            setPropertyFromGroup("notes", id, "scale.y", playerScale)
         end
     else
         if middlescroll then
@@ -35,9 +42,9 @@ function t.onSpawnNote(id, data, type, isSustainNote, strumTime)
             setPropertyFromGroup("notes", id, "multSpeed", multSpeed*0.25)
         end
 
-        setPropertyFromGroup("notes", id, "scale.x", t.strums.opponentStrums.scale)
+        setPropertyFromGroup("notes", id, "scale.x", opponentScale)
         if not isSustainNote then
-            setPropertyFromGroup("notes", id, "scale.y", t.strums.opponentStrums.scale)
+            setPropertyFromGroup("notes", id, "scale.y", opponentScale)
         end
     end
 end

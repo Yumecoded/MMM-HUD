@@ -13,8 +13,8 @@ function t.positionStrums()
             local y = t[v[1]].y
             local noteSpacing = t[v[1]].noteSpacing
             local scale = t[v[1]].scale
-            if noteSkinPostfix == "-pixel" then
-                scale = scale*6
+            if getPropertyFromClass("PlayState", "isPixelStage") then
+                scale = scale*8
             end
             local width = t[v[1]].width
 
