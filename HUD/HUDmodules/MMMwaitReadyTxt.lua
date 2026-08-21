@@ -23,7 +23,7 @@ function t.onUpdatePost(elapsed)
         if getProperty("waitReadySpr.text")=="waiting for other player..." and (not t.updateDots) then
             t.updateDots = true
             setTextString("MMMwaitReadyTxt", "Waiting for other player"..string.rep(".", t.dots))
-            runTimer("MMMwaitReadyTxt", 1)
+            runTimer("MMMwaitReadyTxt", 1/3)
         end
     end
 end
@@ -39,7 +39,7 @@ function t.onTimerCompleted(tag, loops, loopsLeft)
 
         if not songStarted then
             setTextString("MMMwaitReadyTxt", "Waiting for other player"..string.rep(".", t.dots))
-            runTimer("MMMwaitReadyTxt", 1)
+            runTimer("MMMwaitReadyTxt", 1/3)
         end
     end
 end
