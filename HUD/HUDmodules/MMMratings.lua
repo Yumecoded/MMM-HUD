@@ -7,13 +7,21 @@ function t.resize()
     t.xOffset = 140
     t.x = {
         [true] = t.strums["playerStrums"].x - t.xOffset,
-        [false] = t.strums["playerStrums"].x + (t.strums.width+t.strums["playerStrums"].noteSpacing)*mania + t.xOffset
+        [false] = t.strums["playerStrums"].x + (t.strums["playerStrums"].width+t.strums["playerStrums"].noteSpacing)*mania + t.xOffset
+    }
+    t.opponentX = {
+        [true] = t.strums["opponentStrums"].x - 28,
+        [false] = t.strums["opponentStrums"].x + (t.strums["opponentStrums"].width+t.strums["opponentStrums"].noteSpacing)*mania + 88
     }
     if downscroll then
         t.y = t.strums["playerStrums"].y + 70
+        t.opponentY = t.strums["opponentStrums"].y + 70
     else
         t.y = t.strums["playerStrums"].y + 165
+        t.opponentY = t.strums["opponentStrums"].y + 165
     end
+
+    t.scale = 0.3
 end
 
 function t.create()
@@ -51,8 +59,8 @@ function t.getRating(strumTime)
     return "shit"
 end
 
-function t.spawnRating(id, right)
-    if middlescroll then right = not right end
+function t.spawnRating(id, right, otherPlayer, sid)
+    if middlescroll and (not otherPlayer) then right = not right end
 
     local tag = "MMMrating"
     local i = 1
@@ -61,31 +69,54 @@ function t.spawnRating(id, right)
         while luaSpriteExists(tag..i) do
             i = i + 1
         end
+    elseif otherPlayer then
+        i = sid
     end
 
-    local strumTimeNoAbs = getSongPosition() - getPropertyFromGroup("notes", id, "strumTime") + ratingOffset
-    local strumTime = math.abs(strumTimeNoAbs)
+    local rating
+    local x
+    if otherPlayer then
+        x = t.opponentX[right]
+        y = t.opponentY
+    else
+        x = t.x[right]
+        y = t.y
+    end
 
-    local x = t.x[right]
+    local scale = t.scale
+    local velocity = -319.45
+    local acceleration = 542.52
+    if otherPlayer and middlescroll then
+        scale = scale / 2
+        velocity = velocity / 2
+        acceleration = acceleration / 2
+    end
 
-    local rating = t.getRating(strumTime)
+    if type(id)=="string" then
+        rating = id
+    else
+        local strumTimeNoAbs = getSongPosition() - getPropertyFromGroup("notes", id, "strumTime") + ratingOffset
+        local strumTime = math.abs(strumTimeNoAbs)
+
+        rating = t.getRating(strumTime)
+    end
 
     if showNoteTiming then
         setProperty("MMMnoteTimingRating.x", x)
-        setProperty("MMMnoteTimingRating.y", t.y+35)
+        setProperty("MMMnoteTimingRating.y", y+35)
         setTextString("MMMnoteTimingRating", math.floor(-strumTimeNoAbs).."ms")
         setTextColor("MMMnoteTimingRating", timingColors[rating])
         setProperty("MMMnoteTimingRating.alpha", 1)
         runTimer("MMMnoteTimingRating", 1)
     end
 
-    makeLuaSprite(tag..i, rating, x, t.y)
+    makeLuaSprite(tag..i, rating, x, y)
     setObjectCamera(tag..i, "hud")
-    scaleObject(tag..i, 0.3, 0.3)
+    scaleObject(tag..i, scale, scale)
     addLuaSprite(tag..i, true)
 
-    setProperty(tag..i..".velocity.y", -319.45)
-    setProperty(tag..i..".acceleration.y", 542.52)
+    setProperty(tag..i..".velocity.y", velocity)
+    setProperty(tag..i..".acceleration.y", acceleration)
 
     if colorRating then
         setProperty(tag..i..".color", FlxColor(ratingColors[rating]))
@@ -108,8 +139,22 @@ function t.opponentNoteHit(id, noteData, noteType, isSustainNote)
     if isSustainNote or disableComboRating then return end
 
     if (not playsAsBF()) then
-        t.spawnRating(id, playsAsBF())
+        t.spawnRating(id, playsAsBF(), false)
     end
+end
+
+function t.onMessageNoteHit(sid, message)
+    local time = message[1]
+    local noteData = message[2]
+    local isSustainNote = message[3]
+    local ratingImage = message[4]
+
+    if sid==getPlayerSelfSID() then return end
+    if isSustainNote then return end
+    if not ratingImage then return end
+
+    local player = getPlayer(sid)
+    t.spawnRating(ratingImage, player.bfSide, true, sid)
 end
 
 function t.onTimerCompleted(tag, loops, loopsLeft)
