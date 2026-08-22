@@ -51,6 +51,7 @@ function t.create()
         getPropertyFromClass("backend.ClientPrefs", "data.badWindow")
     }
     t.ratingNames = {"sick", "good", "bad"}
+    t.lastMessageNoteHit = {}
 
     if showNoteTiming then
         makeLuaText("MMMnoteTimingRating", "0ms", 0, 0, 0)
@@ -137,18 +138,32 @@ function t.spawnRating(id, right, otherPlayer, sid)
     runTimer(tag..i, 1/60*45)
 end
 
+function t.checkRemoteNoteHit(id, noteData)
+    for sid,v in pairs(t.lastMessageNoteHit) do
+        for k,note in pairs(v) do
+            if note.id==id then
+                t.lastMessageNoteHit[sid][k] = nil
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function t.goodNoteHit(id, noteData, noteType, isSustainNote)
     if hideHud then return end
     if isSustainNote or disableComboRating then return end
+    if t.checkRemoteNoteHit(id, noteData) then return end
 
     if playsAsBF() then
-        t.spawnRating(id, playsAsBF())
+        t.spawnRating(id, playsAsBF(), false)
     end
 end
 
 function t.opponentNoteHit(id, noteData, noteType, isSustainNote)
     if hideHud then return end
     if isSustainNote or disableComboRating then return end
+    if t.checkRemoteNoteHit(id, noteData) then return end
 
     if (not playsAsBF()) then
         t.spawnRating(id, playsAsBF(), false)
@@ -160,6 +175,9 @@ function t.onMessageNoteHit(sid, message)
     local noteData = message[2]
     local isSustainNote = message[3]
     local ratingImage = message[4]
+    local noteType = message[5]
+    local noteIndex = message[6]
+    local mustPress = message[7]
 
     if sid==getPlayerSelfSID() then return end
     if isSustainNote then return end
@@ -167,6 +185,11 @@ function t.onMessageNoteHit(sid, message)
 
     local player = getPlayer(sid)
     t.spawnRating(ratingImage, player.bfSide, true, sid)
+
+    if not t.lastMessageNoteHit[sid] then
+        t.lastMessageNoteHit[sid] = {}
+    end
+    table.insert(t.lastMessageNoteHit[sid], {id = noteIndex})
 end
 
 function t.onTimerCompleted(tag, loops, loopsLeft)
