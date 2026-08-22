@@ -37,7 +37,7 @@ function t.onTimerCompleted(tag, loops, loopsLeft)
             t.dots = 1
         end
 
-        if not songStarted then
+        if luaTextExists("MMMwaitReadyTxt") then
             setTextString("MMMwaitReadyTxt", "Waiting for other player"..string.rep(".", t.dots))
             runTimer("MMMwaitReadyTxt", 1/3)
         end
