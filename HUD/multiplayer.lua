@@ -56,5 +56,15 @@ else
     t.winCondition = 0
     t.opponentPresent = false
 end
+t.opponentBotplay = false
+
+function t.onUpdatePost()
+    if #t.opponents ~= 1 or t.opponentBotplay then return end
+
+    local player = getPlayer(t.opponents[1])
+    if player.botplay then
+        t.opponentBotplay = true
+    end
+end
 
 return t

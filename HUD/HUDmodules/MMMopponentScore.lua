@@ -47,8 +47,18 @@ function t.resize(newWidth)
     setProperty("MMMopponentScore.y", t.y)
 end
 
+function t.onUpdatePost()
+    if not multiplayer.opponentBotplay then return end
+
+    if getTextString("MMMopponentScore")~="[BOTPLAY]" then
+        setTextString("MMMopponentScore", "[BOTPLAY]")
+    end
+    setProperty("MMMopponentScore.alpha", 1 - math.sin((math.pi * botplaySine) / 180))
+end
+
 function t.doScoreUpdate(sid)
     if multiplayer.isPlayerOnTheSameSide(sid) then return end
+    if multiplayer.opponentBotplay then return end
 
     local winCondition = multiplayer.winCondition
     local value = multiplayer.getStat(winCondition, sid)
@@ -86,6 +96,7 @@ end
 
 function t.onMessageStrumPlay(sid, message)
     if multiplayer.isPlayerOnTheSameSide(sid) then return end
+    if multiplayer.opponentBotplay then return end
 
     if not t.updateScore then
         t.updateScore = true

@@ -96,6 +96,7 @@ function onUpdatePost(elapsed)
 
     compat.onUpdatePost()
     antiModchart.onUpdatePost()
+    multiplayer.onUpdatePost()
 
     hidePsychHUD()
     destroyCustomHUD()
