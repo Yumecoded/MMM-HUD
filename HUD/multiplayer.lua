@@ -59,6 +59,7 @@ end
 t.opponentBotplay = false
 
 function t.onUpdatePost()
+    if not online then return end
     if #t.opponents ~= 1 or t.opponentBotplay then return end
 
     local player = getPlayer(t.opponents[1])
