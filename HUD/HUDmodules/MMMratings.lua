@@ -10,15 +10,27 @@ function t.resize()
         [false] = t.strums["playerStrums"].x + (t.strums["playerStrums"].width+t.strums["playerStrums"].noteSpacing)*mania + t.xOffset
     }
     t.opponentX = {
-        [true] = t.strums["opponentStrums"].x - 28,
-        [false] = t.strums["opponentStrums"].x + (t.strums["opponentStrums"].width+t.strums["opponentStrums"].noteSpacing)*mania + 88
+        [true] = t.strums["opponentStrums"].x,
+        [false] = t.strums["opponentStrums"].x + (t.strums["opponentStrums"].width+t.strums["opponentStrums"].noteSpacing)*mania
     }
+    if middlescroll then
+        t.opponentX[true] = t.opponentX[true] - 28
+        t.opponentX[false] = t.opponentX[false] + 88
+    else
+        t.opponentX[true] = t.opponentX[true] - t.xOffset
+        t.opponentX[false] = t.opponentX[false] + t.xOffset
+    end
+
     if downscroll then
         t.y = t.strums["playerStrums"].y + 70
         t.opponentY = t.strums["opponentStrums"].y + 70
     else
         t.y = t.strums["playerStrums"].y + 165
-        t.opponentY = t.strums["opponentStrums"].y + 165
+        if middlescroll then
+            t.opponentY = t.strums["opponentStrums"].y + 100
+        else
+            t.opponentY = t.strums["opponentStrums"].y + 165
+        end
     end
 
     t.scale = 0.3
