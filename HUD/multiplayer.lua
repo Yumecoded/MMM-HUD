@@ -51,9 +51,15 @@ if online then
         t.opponents = t.playersRightSide
     end
 
+    t.multipleTeammates = #t.myTeam > 1
+    t.multipleOpponents = #t.opponents > 1
+
+    t.MMMTeamMode = t.multipleTeammates or t.multipleOpponents
+
     t.opponentPresent = #t.opponents > 0
 else
     t.winCondition = 0
+    t.MMMTeamMode = false
     t.opponentPresent = false
 end
 t.opponentBotplay = false

@@ -31,16 +31,14 @@ function t.onUpdatePost(elapsed)
 
         local scoreString
 
---         if MMMTeamMode then
---             score = 0
---
---             for i=1, #myTeam do
---                 local sid = myTeam[i]
---                 local player = getPlayer(sid)
---
---                 score = score + player.score
---             end
---         end
+        if multiplayer.MMMTeamMode then
+            for _,sid in pairs(multiplayer.myTeam) do
+                if sid~=getPlayerSelfSID() then
+                    local player = getPlayer(sid)
+                    score = score + player.score
+                end
+            end
+        end
 
         scoreString = "Score: "..score.." | Misses: "..misses.." | Accuracy: "..accuracy..'%'
 
